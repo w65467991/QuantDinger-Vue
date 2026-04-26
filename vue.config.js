@@ -128,6 +128,9 @@ const vueConfig = {
   devServer: {
     // development server port 8000
     port: 8000,
+    client: {
+      progress: false
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
