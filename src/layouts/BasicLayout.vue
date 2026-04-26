@@ -28,26 +28,6 @@
         </div>
       </template>
 
-      <!-- 用户协议弹窗 -->
-      <a-modal :visible="showLegalModal" :footer="null" :title="$t('menu.footer.userAgreement')" @cancel="showLegalModal = false" :width="800">
-        <div style="max-height: 60vh; overflow: auto; white-space: pre-wrap; line-height: 1.8; padding: 16px;">
-          {{ menuFooterConfig.legal.user_agreement || $t('user.login.legal.content') }}
-        </div>
-        <div style="margin-top: 12px; text-align: right;">
-          <a-button type="primary" @click="showLegalModal = false">OK</a-button>
-        </div>
-      </a-modal>
-
-      <!-- 隐私条例弹窗 -->
-      <a-modal :visible="showPrivacyModal" :footer="null" :title="$t('menu.footer.privacyPolicy')" @cancel="showPrivacyModal = false" :width="800">
-        <div style="max-height: 60vh; overflow: auto; white-space: pre-wrap; line-height: 1.8; padding: 16px;">
-          {{ menuFooterConfig.legal.privacy_policy || $t('user.login.privacy.content') }}
-        </div>
-        <div style="margin-top: 12px; text-align: right;">
-          <a-button type="primary" @click="showPrivacyModal = false">OK</a-button>
-        </div>
-      </a-modal>
-
       <setting-drawer ref="settingDrawer" :settings="settings" @change="handleSettingChange">
         <div style="margin: 12px 0;">
           This is SettingDrawer custom footer content.
@@ -66,53 +46,6 @@
     <!-- 菜单底部 footer - 直接写，不依赖插槽 -->
     <div class="custom-menu-footer" :class="{ 'collapsed': collapsed, 'drawer-open': isMobile && isDrawerOpen, 'drawer-animating': isMobile && isDrawerAnimating }">
       <div v-if="!collapsed" class="menu-footer-content">
-        <!-- 联系我们 -->
-        <div class="footer-section">
-          <div class="section-title">{{ $t('menu.footer.contactUs') }}</div>
-          <div class="section-links">
-            <a :href="menuFooterConfig.contact.support_url" target="_blank">{{ $t('menu.footer.support') }}</a>
-            <span class="separator">|</span>
-            <a :href="menuFooterConfig.contact.feature_request_url" target="_blank">{{ $t('menu.footer.featureRequest') }}</a>
-          </div>
-        </div>
-
-        <!-- 获取支持 -->
-        <div class="footer-section">
-          <div class="section-title">{{ $t('menu.footer.getSupport') }}</div>
-          <div class="section-links">
-            <a :href="'mailto:' + menuFooterConfig.contact.email">{{ $t('menu.footer.email') }}</a>
-            <span class="separator">|</span>
-            <a :href="menuFooterConfig.contact.live_chat_url" target="_blank">{{ $t('menu.footer.liveChat') }}</a>
-          </div>
-        </div>
-
-        <!-- 社交账户 -->
-        <div class="footer-section" v-if="menuFooterConfig.social_accounts && menuFooterConfig.social_accounts.length > 0">
-          <div class="section-title">{{ $t('menu.footer.socialAccounts') }}</div>
-          <div class="social-icons">
-            <a
-              v-for="(account, index) in menuFooterConfig.social_accounts"
-              :key="index"
-              :href="account.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              :title="account.name"
-              class="social-icon"
-            >
-              <Icon :icon="`simple-icons:${account.icon}`" class="social-icon-svg" />
-            </a>
-          </div>
-        </div>
-
-        <!-- 用户协议和隐私条例 -->
-        <div class="footer-section">
-          <div class="section-links">
-            <a @click="showLegalModal = true">{{ $t('menu.footer.userAgreement') }}</a>
-            <span class="separator">&</span>
-            <a @click="showPrivacyModal = true">{{ $t('menu.footer.privacyPolicy') }}</a>
-          </div>
-        </div>
-
         <!-- 版权信息 -->
         <div class="footer-section copyright">
           {{ menuFooterConfig.copyright }}
@@ -148,7 +81,6 @@ import {
 import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import SettingDrawer from '@/components/SettingDrawer/SettingDrawer'
-import { Icon } from '@iconify/vue2'
 import logoLight from '@/assets/logo.png'
 import logoDark from '@/assets/logo_w.png'
 import slogoImg from '@/assets/slogo.png'
@@ -157,8 +89,7 @@ export default {
   name: 'BasicLayout',
   components: {
     SettingDrawer,
-    RightContent,
-    Icon
+    RightContent
     // GlobalFooter,
     // Ads
   },
@@ -195,9 +126,6 @@ export default {
 
       // 是否手机模式
       isMobile: false,
-      // 法律免责声明弹窗显示状态
-      showLegalModal: false,
-      showPrivacyModal: false,
       // 用于刷新内容区域的 key
       refreshKey: 0,
       // drawer 是否打开（手机端）
@@ -206,23 +134,6 @@ export default {
       isDrawerAnimating: false,
       // Static footer config (local OSS build)
       menuFooterConfig: {
-        contact: {
-          support_url: 'https://t.me/quantdinger',
-          feature_request_url: 'https://github.com/brokermr810/QuantDinger/issues',
-          email: 'brokermr810@gmail.com',
-          live_chat_url: 'https://t.me/quantdinger'
-        },
-        social_accounts: [
-          { name: 'GitHub', icon: 'github', url: 'https://github.com/brokermr810/QuantDinger' },
-          { name: 'X', icon: 'x', url: 'https://x.com/quantdinger_en' },
-          { name: 'Discord', icon: 'discord', url: 'https://discord.com/invite/tyx5B6TChr' },
-          { name: 'Telegram', icon: 'telegram', url: 'https://t.me/quantdinger' },
-          { name: 'YouTube', icon: 'youtube', url: 'https://youtube.com/@quantdinger' }
-        ],
-        legal: {
-          user_agreement: '',
-          privacy_policy: ''
-        },
         copyright: '© 2025-2026 Watch Dog. All rights reserved.'
       },
       // 是否是首次初始化主题色（用于决定是否显示"正在切换主题"提示）
